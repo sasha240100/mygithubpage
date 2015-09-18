@@ -13,7 +13,8 @@
     <style>
         #content {
             position: fixed;
-            bottom:100px
+            bottom:100px;
+            display:none;
         }
 
         #content ul li {
@@ -25,6 +26,37 @@
             background: rgba(255,255,255, 0.5);
             justify-content: center;
             align-items: center;
+            box-shadow: 0 0 15px #F2B705;
+            transition: all 0.5s;
+            -webkit-transition: all 0.3s;
+            -moz-transition: all 0.3s;
+            -o-transition: all 0.3s;
+        }
+
+        #content ul li:hover {
+            box-shadow: 0 0 25px blue;
+            margin-top: -3px;
+        }
+
+        #content ul li:hover i.fa-twitter {
+            color:aqua;
+        }
+
+        #content ul li:hover i.fa-facebook {
+            color:blue;
+        }
+
+        #content ul li:hover i.fa-github {
+            color:black;
+        }
+
+        #content ul li i {
+            color: #F2B705;
+            text-shadow: 0 0 5px;
+            transition: all 0.5s;
+            -webkit-transition: all 0.3s;
+            -moz-transition: all 0.3s;
+            -o-transition: all 0.3s;
         }
 
         #content ul {
@@ -200,7 +232,7 @@
                 });
 
             tween.onComplete(function() {
-                //wdText.visible = true;
+                //composer.slice(0,3);
             });
 
             tween.start();
@@ -283,6 +315,8 @@
                     $('#content').css('left', $(window).width()*0.5 - $('#content').width()*0.5);
                     wdText.material.opacity = (-this.space + 400)/150;
         }).start();
+
+        $('#content').fadeIn(5000);
 
       }
 
