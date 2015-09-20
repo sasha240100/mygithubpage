@@ -5,6 +5,10 @@
     <title> Alexander Buzin | Web-development</title>
     <link rel="stylesheet" href="css/font-awesome.min.css" />
     <!--<link href='https://fonts.googleapis.com/css?family=Lobster|Play|Pacifico|Exo+2|Orbitron|Bangers|Ruda' rel='stylesheet' type='text/css'>-->
+    <script>
+        if (window.location.protocol != "https:" && !(location.host == "test1.ru"))
+            window.location.href = "https:" + window.location.href.substring(window.location.protocol.length);
+    </script>
     <script src="jquery-1.11.1.min.js"></script>
     <script src="three.js"></script>
     <script src="tween.min.js"></script>
@@ -95,10 +99,6 @@
 
     <!-- THREE.JS Implementation -->
     <script src="app.js"></script>
-    <script>
-        if (window.location.protocol != "https:")
-            window.location.href = "https:" + window.location.href.substring(window.location.protocol.length);
-    </script>
 </body>
 
 </html>
