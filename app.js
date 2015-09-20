@@ -1,4 +1,4 @@
-      var scene, camera, render, text, originGeom, abTextGeom, wdTextGeom, composer;
+      var scene, camera, render, text, originGeom, abTextGeom, wdTextGeom, fullGeom, composer;
 
       function init() {
           scene = new THREE.Scene();
@@ -34,6 +34,8 @@
 
           abTextGeom.dynamic = true;
           abTextGeom.verticesNeedUpdate = true;
+
+          fullGeom = abTextGeom.clone();
 
           wdTextGeom = new THREE.TextGeometry("by Alexander Buzin", {
 
@@ -154,7 +156,7 @@
 
               // FIXME: use this func.
               tween.onComplete(function () {
-
+                  newGeom = fullGeom;
               });
 
               tween.start();
@@ -261,12 +263,42 @@
       }
 
 
+      function changeLocation() {
+          var wrPP = new WAGNER.PixelatePass();;
+          wrPP.params.amount = 640;
+
+          composer.eff.push(wrPP);
+
+          var tweenpixel = new TWEEN.Tween({
+                  space: 640
+              }).to({
+                  space: 1
+              }, 500)
+              .easing(TWEEN.Easing.Circular.Out)
+              .onUpdate(function () {
+                  wrPP.params.amount = this.space;
+              }).onComplete(function() {
+                  var tweenpixel2 = new TWEEN.Tween({
+                      space: 1
+                  }).to({
+                      space: 650
+                  }, 500)
+                  .easing(TWEEN.Easing.Circular.In)
+                  .onUpdate(function () {
+                      wrPP.params.amount = this.space;
+                  }).onComplete(function() {
+                      composer.eff.slice(0, composer.eff.length-1);
+                  }).start();
+              }).start();
+      }
+
+
 
       $(document).on('mousemove', function (e) {
           var tx = e.clientX - window.innerWidth * 0.5;
           var ty = e.clientY - window.innerHeight * 0.5;
 
-          camera.position.x = -tx / 50;
+          camera.position.x = -tx / 15;
           camera.position.y = ty / 50;
           camera.lookAt(new THREE.Vector3(-tx / 100, ty / 100, -50));
       });
