@@ -82,38 +82,39 @@ class Planer extends Component {
     if (!this.readyForUpdate) return;
     this.readyForUpdate = false;
 
-    for (let x = 0; x < 9; x++) { // 9
-      for (let y = 0; y < 6; y++) { // 6
-        TextureLoader.load(url, (texture) => {
-          const minPlane = this.minPlanes[x][y];
+    TextureLoader.load(url, (tex) => {
+      for (let x = 0; x < 9; x++) { // 9
+        for (let y = 0; y < 6; y++) { // 6
+            const minPlane = this.minPlanes[x][y];
+            const texture = tex.clone();
 
-          texture.repeat.set(1/9, 1/6);
-          texture.offset.set(x/9, -y/6 - 1/6);
+            texture.repeat.set(1/9, 1/6);
+            texture.offset.set(x/9, -y/6 - 1/6);
 
-          texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-          texture.needsUpdate = true;
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            texture.needsUpdate = true;
 
-          TweenLite.to(minPlane.rotation, 0.2, {
-            x: Math.PI/2, 
-            delay: (x*6 + y)/40, 
-            ease: Power2.easeInOut, 
-            onUpdate: this.updateRotation(minPlane),
-            onComplete: () => {
-              minPlane.material.map = texture;
-            }
-          });
+            TweenLite.to(minPlane.rotation, 0.2, {
+              x: Math.PI/2, 
+              delay: (x*6 + y)/40, 
+              ease: Power2.easeInOut, 
+              onUpdate: this.updateRotation(minPlane),
+              onComplete: () => {
+                minPlane.material.map = texture;
+              }
+            });
 
-          TweenLite.to(minPlane.rotation, 0.2, {
-            x: 0, 
-            delay: (x*6 + y + 15)/40, 
-            ease: Power2.easeInOut, 
-            onUpdate: this.updateRotation(minPlane)
-          });
-        });
+            TweenLite.to(minPlane.rotation, 0.2, {
+              x: 0, 
+              delay: (x*6 + y + 15)/40, 
+              ease: Power2.easeInOut, 
+              onUpdate: this.updateRotation(minPlane)
+            });
+        }
       }
-    }
 
-    window.setTimeout(() => {this.readyForUpdate = true;}, ((9*6 + 6 + 15)/40 + 0.2)*1000);
+      window.setTimeout(() => {this.readyForUpdate = true;}, ((9*6 + 6 + 15)/40 + 0.2)*1000);
+    });
   }
 } 
 

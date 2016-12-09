@@ -10,6 +10,7 @@ import {VirtualMouse} from 'whs/src/framework/extras/VirtualMouse';
 import {OrbitControls} from 'whs/src/framework/extras/controls/OrbitControls';
 import {Plane} from 'whs/src/framework/components/meshes/Plane';
 import * as THREE from 'whs/src/framework/three';
+import './lib/polyfill';
 
 const TweenLite = require('gsap').TweenLite;
 
@@ -61,7 +62,7 @@ connector.addTo(world);
 
 connector.lineAnimation(world);
 
-const lookAtVec = new THREE.Vector3(-7, 5, 0);
+const lookAtVec = new THREE.Vector3(-7, 25, 0); // 5
 
 vmouse.on('move', () => {
   world.$camera.position.x = vmouse.x * 10 - 10;
@@ -69,13 +70,18 @@ vmouse.on('move', () => {
   spotty.position.x = vmouse.x * 30 + 10;
 });
 
+TweenLite.to(lookAtVec, 3, {y: 5, onUpdate: () => {
+  world.$camera.position.y = lookAtVec.y;
+  world.$camera.lookAt(lookAtVec);
+}, ease: Power3.easeOut});
+
 new Plane({
   geometry: {
     width: 400, 
-    height: 100
+    height: 300
   },
 
-  position: [0, -60, -10],
+  position: [0, -160, -10],
 
   rotation: {
     z: - Math.PI / 32
@@ -91,3 +97,62 @@ new Plane({
 
 // world.setControls(new OrbitControls());
 
+/* STAGES */
+
+let currentStage = 0;
+
+// 0
+function projects() {
+  if (currentStage === 0) return;
+
+  TweenLite.to(lookAtVec, 3, {y: 5, onUpdate: () => {
+    world.$camera.position.y = lookAtVec.y;
+    world.$camera.lookAt(lookAtVec);
+  }, ease: Power3.easeOut});
+
+  document.getElementsByTagName('header')[0].className = '';
+  document.getElementById('content').className = '';
+
+  currentStage = 0;
+}
+
+window.goToProjects = projects;
+
+// 1
+function about() {
+  if (currentStage === 1) return;
+
+  TweenLite.to(lookAtVec, 3, {y: -110, onUpdate: () => {
+    world.$camera.position.y = lookAtVec.y;
+    world.$camera.lookAt(lookAtVec);
+  }, ease: Power3.easeOut});
+
+  document.getElementsByTagName('header')[0].className += ' inversed';
+  document.getElementById('content').className += ' show';
+
+  currentStage = 1;
+}
+
+window.goToAbout = about;
+
+let isScrolled = false;
+let isScrolledTimout;
+
+document.getElementById('content').addEventListener('scroll', () => {
+  isScrolled = true;
+  window.clearTimeout(isScrolledTimout);
+  isScrolledTimout = window.setTimeout(() => {isScrolled = false}, 300);
+});
+
+window.addWheelListener(document, e => {
+  if (e.deltaY > 0)  { // down
+    if (currentStage === 0) window.goToAbout();
+  } else { //up
+    if (
+      currentStage === 1
+      && document.getElementById('content').scrollTop <= 0
+      && isScrolled === false
+      && Math.abs(e.deltaY) < 40
+      ) window.goToProjects();
+  }
+});

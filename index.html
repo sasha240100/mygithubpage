@@ -3,7 +3,8 @@
 <head>
   <title>Webpack test</title>
 </head>
-<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:700|Raleway:900" rel="stylesheet">
+<!--<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:700|Raleway:900" rel="stylesheet">-->
+<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:700|Raleway:900|Source+Sans+Pro:400,700,900" rel="stylesheet">
 <style>
 html, body {
   position: relative;
@@ -14,6 +15,10 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+
+  /* FONTS */
+  -webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 
   /* BACKGROUND */
   background: rgba(245,245,245,1);
@@ -34,13 +39,44 @@ header {
   top: 0;
 }
 
+header.inversed .fUnder, header.inversed ul li {
+	color: white;
+	border-color: white;
+}
+
 header ul {
   display: block;
   float: left;
+  overflow: hidden;
+  width: 100px;
+  animation: initName 1s;
+}
+
+@keyframes initName {
+	from { width: 0px; color: white; }
+	to { width: 100px; color: black; }
+}
+
+.fUnder {
+	border-bottom: 4px solid black;
+	border-color: black;
+	animation: fUnder 1s;
+}
+
+@keyframes fUnder {
+	from { border-color: rgb(0, 255, 213); color: rgb(0, 255, 213); }
+	to { border-color: black; color: black; }
+}
+
+@keyframes colorAnim {
+	from { color: rgb(0, 255, 213); }
+	to { color: black; }
 }
 
 header ul li {
   list-style: none;
+  animation: colorAnim 1s;
+  transition: all 2s ease-in;
 }
 
 footer {
@@ -89,6 +125,60 @@ footer ul li hr {
   height: 4px;
 }
 
+#content {
+	position: fixed;
+	font-family: 'Source Sans Pro', sans-serif;
+	line-height: 1.2;
+	font-size: 15pt;
+	color: white;
+	top: 0;
+	transition: transform 2.5s ease-in-out;
+	transform: translateY(200%);
+	overflow: auto;
+	height: 100%;
+	width: 100%;
+}
+
+#content > div {
+	max-width: 600px;
+	margin: 0 auto;
+	padding: 40px 60px;
+}
+
+#content.show {
+	transform: translateY(0%);
+	transition: transform 1.5s ease-in-out;
+}
+
+#content a {
+  text-decoration: none;
+	color: #eee;
+	font-weight: 700;
+	border-bottom: 2.7px solid #ddd;
+	margin: 0 1.5px;
+	line-height: 1.3;
+	display: inline-block;
+}
+
+#content ul {
+  font-weight: 700;
+  list-style: none;
+	padding: 10px 0;
+}
+
+#content h2 {
+	padding: 20px 0 0 0;
+	margin: 20px 0 0 0;
+}
+
+#content ul.yearlist {
+	margin: 0px;
+  font-weight: 400;
+  color: #ddd;
+	list-style: square !important; 
+	    padding: 10px 0 0 20px;
+}
+
 .email {
   font-family: 'Josefin Sans', sans-serif;
   position: fixed;
@@ -108,18 +198,61 @@ footer ul li hr {
   background: #6400cb; /* Gecko Browsers */
   opacity: 0.7;
 }
+
+*::-webkit-scrollbar {
+    width: 0.25em;
+}
+ 
+*::-webkit-scrollbar-track {
+    /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
+}
+ 
+*::-webkit-scrollbar-thumb {
+  background-color: #333;
+  outline: 1px solid slategrey;
+}
 </style>
 <body>
+<div id="content">
+	<div>
+	<p>My name is <b>Alexander Buzin.</b><br/>I am 16 y.o. full-stack developer from <a href="#">Kiev, Ukraine.</a></p>
+	<p>I love interactive 3D art (especially in web). There are a lot of cool projects i have seen so far. They inspire me to create something new, undiscovered and interactive.</p>
+	<p>Open-source is where i began my creative way and till now i contribute to Javascript-related projects (including NodeJS).</p>
+	<ul>
+		<li><span style="color: rgb(0, 255, 213); padding: 0 10px;">Skills:</span>Full-stack developer</li>
+		<li><span style="color: rgb(0, 255, 213); padding: 0 10px;">Interests:</span>Web-design<span style="color:#aaa">,</span> Web-development<span style="color:#aaa">,</span> Interactive 3D</li>
+	</ul>
+
+	<br>
+
+	<h2 style="color: rgb(138, 0, 255);">2016</h2>
+	<ul class="yearlist">
+		<li>Intel ISEF 3rd award winner</li>
+	</ul>
+
+	<h2 style="color: rgb(255, 0, 179);">2015</h2>
+	<ul class="yearlist">
+		<li>Active Open-source contributor</li>
+		<li>Started developing project <a href="#">«WhitestormJS»</a></li>
+	</ul>
+
+	<h2 style="color: rgb(0, 223, 255);">2010</h2>
+	<ul class="yearlist">
+		<li>Started learning web-design</li>
+		<li>Created first website</li>
+	</ul>
+	</div>
+</div>
 <header>
   <ul>
-    <li style="border-bottom: 4px solid black;">ALEXANDER</li>
+    <li class="fUnder">ALEXANDER</li>
     <li>BUZIN</li>
   </ul>
 </header>
 <footer>
   <ul>
-    <li><a href="#">PROJECTS</a></li>
-    <li><a href="#">ABOUT</a></li>
+    <li><a href="javascript:goToProjects();">PROJECTS</a></li>
+    <li><a href="javascript:goToAbout();">ABOUT</a></li>
     <li><hr></li>
     <li><a href="https://twitter.com/_alex_buzin">TWITTER</a></li>
     <li><a href="https://www.facebook.com/alexbuzin88">FACEBOOK</a></li>

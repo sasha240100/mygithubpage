@@ -25,7 +25,7 @@ const world = new World({
     far: 10000,
     position: {
       z: 50,
-      y: 5,
+      y: 25, // 5
       x: -10
     }
   },
