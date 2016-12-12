@@ -3,6 +3,7 @@ import {Element} from 'whs/src/framework/core/Element';
 import {MeshComponent} from 'whs/src/framework/core/MeshComponent';
 import {Loop} from 'whs/src/framework/extras/Loop';
 import * as THREE from 'whs/src/framework/three';
+const TweenLite = require('gsap').TweenLite;
 
 class Lincor extends Component {
   constructor(params = {}) {
@@ -26,12 +27,7 @@ class Lincor extends Component {
 
     const matPars = {color: 0x000000, transparent: true, opacity: 0.9, side: THREE.DoubleSide};
 
-    const material = new THREE.MultiMaterial([
-      new THREE.MeshBasicMaterial({color: 0x000000, transparent: true, opacity: 0.7, side: THREE.DoubleSide}),
-      new THREE.MeshBasicMaterial({color: 0x000000, transparent: true, opacity: 0.9}),
-      new THREE.MeshBasicMaterial(matPars),
-      new THREE.MeshBasicMaterial(matPars)
-    ]);
+    const material = new THREE.MeshBasicMaterial(matPars);
 
     this.native = new THREE.Mesh(geometry, material);
 
@@ -46,10 +42,12 @@ class Lincor extends Component {
       new Element(
         outline,
         [MeshComponent]
-      ).addTo(this);
+      ).addTo(this).then(element => {
+        this.$outline = element;
+      });
     });
 
-    this.runGlitch();
+    // this.runGlitch();
   }
 
   runGlitch() {
@@ -64,6 +62,21 @@ class Lincor extends Component {
       window.setTimeout(() => {newMat.opacity = 0}, randomInteger(250, 400));
       tmpMaterial = newMat;
     }, 1600);
+  }
+
+  trigger() {
+    TweenLite.to(this.material.color, 1, {r: 1, g: 1, b: 1, ease: Power1.easeOut});
+    TweenLite.to(this.material.color, 1, {r: 0, g: 0, b: 0, delay: 1, ease: Power1.easeIn});
+
+    if (this.connector) {
+      TweenLite.to(this.connector.material.color, 1, {r: 1, g: 1, b: 1, ease: Power1.easeOut});
+      TweenLite.to(this.connector.material.color, 1, {r: 0, g: 0, b: 0, delay: 1, ease: Power1.easeIn});
+    }
+
+    if (this.$outline) {
+      TweenLite.to(this.$outline.material.color, 1, {r: 0, g: 0, b: 0, ease: Power1.easeOut});
+      TweenLite.to(this.$outline.material.color, 1, {r: 1, g: 1, b: 1, delay: 1, ease: Power1.easeIn});
+    }
   }
 } 
 

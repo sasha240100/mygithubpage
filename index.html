@@ -31,10 +31,42 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#cccccc', GradientType=1 );
 }
 
+body.isHovered {
+	cursor: pointer;
+}
+
+.dark {
+	position: fixed;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: inherit;
+	height: inherit;
+	opacity: 0;
+
+	transition: all 1s ease-in-out;
+	pointer-events: none;
+	z-index: -1;
+
+  /* BACKGROUND */
+  background: rgba(45,45,45,1);
+  background: -moz-linear-gradient(-45deg, rgba(45,45,45,1) 0%, rgba(4,4,4,1) 100%);
+  background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(45,45,45,1)), color-stop(100%, rgba(4,4,4,1)));
+  background: -webkit-linear-gradient(-45deg, rgba(45,45,45,1) 0%, rgba(4,4,4,1) 100%);
+  background: -o-linear-gradient(-45deg, rgba(45,45,45,1) 0%, rgba(4,4,4,1) 100%);
+  background: -ms-linear-gradient(-45deg, rgba(45,45,45,1) 0%, rgba(4,4,4,1) 100%);
+  background: linear-gradient(135deg, rgba(45,45,45,1) 0%, rgba(4,4,4,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#cccccc', GradientType=1 );
+}
+
+.dark.active {
+	opacity: 1;
+}
+
 header {
   font-family: 'Raleway', sans-serif;
   height: 100px;
-  width: 100%;
   position: fixed;
   top: 0;
 }
@@ -82,7 +114,6 @@ header ul li {
 footer {
   font-family: 'Raleway', sans-serif;
   height: 100px;
-  width: 100%;
   position: fixed;
   bottom: 100px;
 
@@ -125,7 +156,7 @@ footer ul li hr {
   height: 4px;
 }
 
-#content {
+.content {
 	position: fixed;
 	font-family: 'Source Sans Pro', sans-serif;
 	line-height: 1.2;
@@ -139,18 +170,18 @@ footer ul li hr {
 	width: 100%;
 }
 
-#content > div {
+.content > div {
 	max-width: 600px;
 	margin: 0 auto;
 	padding: 40px 60px;
 }
 
-#content.show {
+.content.show {
 	transform: translateY(0%);
 	transition: transform 1.5s ease-in-out;
 }
 
-#content a {
+.content a {
   text-decoration: none;
 	color: #eee;
 	font-weight: 700;
@@ -160,18 +191,18 @@ footer ul li hr {
 	display: inline-block;
 }
 
-#content ul {
+.content ul {
   font-weight: 700;
   list-style: none;
 	padding: 10px 0;
 }
 
-#content h2 {
+.content h2 {
 	padding: 20px 0 0 0;
 	margin: 20px 0 0 0;
 }
 
-#content ul.yearlist {
+.content ul.yearlist {
 	margin: 0px;
   font-weight: 400;
   color: #ddd;
@@ -213,9 +244,11 @@ footer ul li hr {
 }
 </style>
 <body>
-<div id="content">
+<div class="dark"></div>
+<!-- ABOUT -->
+<div id="about" class="content">
 	<div>
-	<p>My name is <b>Alexander Buzin.</b><br/>I am 16 y.o. full-stack developer from <a href="#">Kiev, Ukraine.</a></p>
+	<p>My name is <b>Alexander Buzin.</b><br/>I am front-end developer from <a href="#">Kiev, Ukraine.</a></p>
 	<p>I love interactive 3D art (especially in web). There are a lot of cool projects i have seen so far. They inspire me to create something new, undiscovered and interactive.</p>
 	<p>Open-source is where i began my creative way and till now i contribute to Javascript-related projects (including NodeJS).</p>
 	<ul>
@@ -227,20 +260,125 @@ footer ul li hr {
 
 	<h2 style="color: rgb(138, 0, 255);">2016</h2>
 	<ul class="yearlist">
-		<li>Intel ISEF 3rd award winner</li>
+		<li>Intel ISEF 3rd award winner (Phoenix, AZ)</li>
+		<li>Working at Web-studio (Kiev, Ukraine)</li>
 	</ul>
 
 	<h2 style="color: rgb(255, 0, 179);">2015</h2>
 	<ul class="yearlist">
 		<li>Active Open-source contributor</li>
-		<li>Started developing project <a href="#">«WhitestormJS»</a></li>
+		<li>Started developing framework <a href="https://whsjs.io/">«WhitestormJS»</a></li>
+		<li>Working on project «Datalingvo»</li>
 	</ul>
 
-	<h2 style="color: rgb(0, 223, 255);">2010</h2>
+	<h2 style="color: rgb(0, 223, 255);">2014</h2>
 	<ul class="yearlist">
-		<li>Started learning web-design</li>
-		<li>Created first website</li>
+		<li>A couple of side projects in HTML5 and CSS3</li>
 	</ul>
+	</div>
+</div>
+<!-- WhitestormJS -->
+<div id="whsjs" class="content">
+	<div>
+	<img src="/img/showcase1.png" width="600">
+	<p><b>WhitestormJS is a framework for 3D web apps built with Three.js technology.</b></p>
+	<p>It implements a core with component system and plugin support for fast development of 3D scene with physics.</p>
+	<p>Automizing your web app with whitestorm is fast and comfortable. This engine has physics support implemented by custom Physi.js library, which is much faster than others. Framework provides extended component control and high frame rate, because it uses WebWorkers technology for multithreading.</p>
+	<p>Each time you want to develop even a basic application - you need to describe every 3D part of it, such as renderer, frame updating, include external physics, write autoresize if needed. This time we want you to make all it much easier with best performance and functionality. You still can manage all of them, but if you forgot to do that, or just don't need it - whitestorm.js will do all it for you.</p>
+	<a href="https://whsjs.readme.io/docs/getting-started">Full article</a>
+	<ul>
+		<li><span style="color: rgb(0, 255, 213); padding: 0 10px;">Project type:</span>Front-end framework</li>
+		<li><span style="color: rgb(0, 255, 213); padding: 0 10px;">Language:</span>Javascript (es6)</li>
+	</ul>
+
+	<h2>Links</h2>
+	
+	<ul>
+		<li><a href="https://whsjs.io/">Website</a></li>
+		<li><a href="https://github.com/WhitestormJS/whitestorm.js">Github</a></li>
+		<li><a href="https://whsjs.readme.io/docs">Documentation</a></li>
+	</ul>
+	</div>
+</div>
+<!-- WebAssembly -->
+<div id="webassembly" class="content">
+	<div>
+	<img src="/img/showcase2.png" width="600">
+	<p><b>My implementation of WebAssembly logo. That's how i see it.</b></p>
+	<p>The logo is implemented using Adobe Illustratrator in pair with Photoshop. I used my notepad to draw a scetch, when i found it interesting i decided to implement a vector part in Illustrator and then moved to Photoshop to make a composition (mockup with some variations in different colors).</p>
+	<a href="https://github.com/WebAssembly/design/issues/112#issuecomment-264009959">WebAssembly logo github issue</a>
+	<ul>
+		<li><span style="color: rgb(0, 255, 213); padding: 0 10px;">Project type:</span>Art</li>
+		<li><span style="color: rgb(0, 255, 213); padding: 0 10px;">Software used:</span>Adobe Illustrator CC<span style="color:#aaa">,</span> Adobe Photoshop CC</li>
+	</ul>
+
+	<a href="/img/mockup.png" target="_blank"><img src="/img/mockup.png" width="600"></a>
+
+	</div>
+</div>
+<!-- Street Basketball Game -->
+<div id="sbg" class="content">
+	<div>
+	<img src="/img/showcase3.png" width="600">
+	<p><b>That's the first real game i created using WhitestormJS framework.</b></p>
+	<p>I used TweenLite fot smooth animations (as i do on this website, i hope they are as smooth for you), multithreading and LocalStorage for holding whitestorm.js framework (implemented using <a href="https://addyosmani.com/basket.js/">Basket.js</a>, thanks to <a href="https://addyosmani.com/">Addy Osmani</a>) </p>
+	<ul>
+		<li><span style="color: rgb(0, 255, 213); padding: 0 10px;">Project type:</span>3D Game in browser</li>
+		<li><span style="color: rgb(0, 255, 213); padding: 0 10px;">Tools used:</span>WhitestormJS framework<span style="color:#aaa">,</span>  Three.js<span style="color:#aaa">,</span> TweenLite<span style="color:#aaa">,</span> Basket.js</li>
+	</ul>
+
+	<h2>Media</h2>
+	<p>There are 3 parts of a big story of how i develop this game, which technologies used <b>and why</b>
+	<p><b>"Developing a street basketball game."</b></p>
+
+	<ul>
+		<li><a href="https://medium.com/whitestormjs-framework/developing-a-street-basketball-game-part-i-getting-workflow-ready-f4f6968e4d10#.3dt28ae7e">Part I: Getting workflow ready</a></li>
+		<li><a href="https://medium.com/whitestormjs-framework/developing-a-street-basketball-game-part-ll-throw-a-ball-into-a-basket-261f123d6e9c#.kzfh37hm2">Part ll: Throw a ball into a basket.</a></li>
+		<li><a href="https://medium.com/whitestormjs-framework/developing-a-street-basketball-game-part-lll-level-selecting-and-stats-b076747b13b3#.bm0sq8qcn">Part lll: Level selecting and stats</a></li>
+	</ul>	
+	</div>
+</div>
+<!-- WhitestormJS website -->
+<div id="website" class="content">
+	<div>
+	<img src="/img/showcase4.png" width="600">
+	<p><b>Website for WhitestormJS framework made using ReactJS</b></p>
+	<p>I made this website to explain main features of my framework as clear as i could. This website is unique for me, because i used a lot of new libaries and technologies to implement such interaction in navigation (see transition when hovering navigation items).</p>
+	<ul>
+		<li><span style="color: rgb(0, 255, 213); padding: 0 10px;">Project type:</span>Website</li>
+		<li><span style="color: rgb(0, 255, 213); padding: 0 10px;">Tools used:</span>ReactJS framework<span style="color:#aaa">,</span> Granim.js<span style="color:#aaa">,</span> Sass<span style="color:#aaa">,</span> ReactRouter</li>
+	</ul>
+	<a href="https://whsjs.io/">Go to website</a>
+	</div>
+</div>
+<!-- WhitestormJS plugin registry -->
+<div id="registry" class="content">
+	<div>
+	<img src="/img/showcase5.png" width="600">
+	<p><b>Plugin registy based on npms.io</b></p>
+	<p>My favorite feature in gulpjs is <a href="http://gulpjs.com/plugins/">it's plugin registry</a> (that's true). I really wanted such thing to be in WhitestormJS and decided to implement my own.</p> 
+	<p><i>The funny thing is that i was searching web for the reference of "how to do your own plugin registry". Web said: "LOL, we don't know..."</i></p>
+	<p>Thanks to website <a href="https://npms.io/">npms.io</a> (we were the first, who asked them to <a href="https://github.com/npms-io/npms-api/issues/47">open their API</a>), now we have a complete registry made with ReactJS that uses NPM data to search across packages.</p> 
+	<ul>
+		<li><span style="color: rgb(0, 255, 213); padding: 0 10px;">Project type:</span>Website</li>
+		<li><span style="color: rgb(0, 255, 213); padding: 0 10px;">Tools used:</span>ReactJS framework<span style="color:#aaa">,</span> Material UI<span style="color:#aaa">,</span> Sass<span style="color:#aaa">,</span> npms API</li>
+	</ul>
+	<a href="https://plugins.whsjs.io/">Go to registry</a>
+	</div>
+</div>
+<!-- AmmoNext -->
+<div id="ammonext" class="content">
+	<div>
+	<img src="/img/showcase6.png" width="600">
+	<p><b>Physics library based on Ammo.js and Bullet Physics 3</b></p>
+	<p>Current ammo.js is compiled from Bullet Physics 2 sources. Bullet Physics 2 is good enough, but to my mind BP3 is much smoother.</p>
+	<p>AmmoNext is specially optimized to work with Physijs (current ammo.js has different config and not everything that is used in Physijs is exported to latest Ammo).</p> 
+	<p>Thanks to @kripken for the original Ammo.js!</p>
+	<ul>
+		<li><span style="color: rgb(0, 255, 213); padding: 0 10px;">Project type:</span>3D physics library</li>
+		<li><span style="color: rgb(0, 255, 213); padding: 0 10px;">Tools used:</span>Emscripten<span style="color:#aaa">,</span> WebIDL</li>
+	</ul>
+	<a href="github.com/WhitestormJS/AmmoNext">AmmoNext on Github</a>
 	</div>
 </div>
 <header>

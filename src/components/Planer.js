@@ -4,6 +4,7 @@ import {Plane} from 'whs/src/framework/components/meshes/Plane';
 import {Loop} from 'whs/src/framework/extras/Loop';
 import {texture} from 'whs/src/framework/utils/texture';
 import * as THREE from 'whs/src/framework/three';
+import TextureMaterial from '../lib/spriteTextureMaterial';
 
 const TweenLite = require('gsap').TweenLite;
 const TextureLoader = new THREE.TextureLoader();
@@ -22,8 +23,9 @@ class Planer extends Component {
     //   }
     // }));
 
-    this.native = new THREE.Mesh();
+    this.native = new THREE.Object3D();
     this.readyForUpdate = true;
+    this.scid = 'whsjs'; // showcase id.
 
     this.params = params;
 
@@ -65,10 +67,12 @@ class Planer extends Component {
 
           vmouse.track(o);
           o.on('mouseover', () => {
+            if (!this.readyForUpdate) return;
             TweenLite.to(o.rotation, 0.2, {x: Math.PI/2, ease: Power2.easeInOut, onUpdate: this.updateRotation(o)});
           });
 
           o.on('mouseout', () => {
+            if (!this.readyForUpdate) return;
             TweenLite.to(o.rotation, 0.4, {x: 0, delay: 0.4, ease: Power2.easeInOut, onUpdate: this.updateRotation(o)});
           });
         })
@@ -82,17 +86,26 @@ class Planer extends Component {
     if (!this.readyForUpdate) return;
     this.readyForUpdate = false;
 
-    TextureLoader.load(url, (tex) => {
+    const renderer = this.params.world.renderer;
+
+    TextureLoader.load(url, (texture) => {
+      texture.magFilter = THREE.NearestFilter;
+      texture.minFilter = THREE.LinearMipMapLinearFilter;
+
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.needsUpdate = true;
+      texture.anisotropy = renderer.getMaxAnisotropy();
+
       for (let x = 0; x < 9; x++) { // 9
         for (let y = 0; y < 6; y++) { // 6
             const minPlane = this.minPlanes[x][y];
-            const texture = tex.clone();
+            const material = TextureMaterial(texture, 0xffffff);
+
+            material.uniforms.repeat.value.set(1/9, 1/6);
+            material.uniforms.offset.value.set(x/9, -y/6 - 1/6);
 
             texture.repeat.set(1/9, 1/6);
             texture.offset.set(x/9, -y/6 - 1/6);
-
-            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-            texture.needsUpdate = true;
 
             TweenLite.to(minPlane.rotation, 0.2, {
               x: Math.PI/2, 
@@ -100,7 +113,7 @@ class Planer extends Component {
               ease: Power2.easeInOut, 
               onUpdate: this.updateRotation(minPlane),
               onComplete: () => {
-                minPlane.material.map = texture;
+                minPlane.material = material;
               }
             });
 

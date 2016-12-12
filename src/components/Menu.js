@@ -3,6 +3,7 @@ import {Element} from 'whs/src/framework/core/Element';
 import {MeshComponent} from 'whs/src/framework/core/MeshComponent';
 import {Loop} from 'whs/src/framework/extras/Loop';
 import * as THREE from 'whs/src/framework/three';
+import {hoverBody, unHoverBody} from '../utils/changeCursor';
 
 const TweenLite = require('gsap').TweenLite;
 
@@ -14,18 +15,19 @@ class Menu extends Component {
     this.itemsCount = 0;
     this.vmouse = this.params.vmouse;
     this.planer = this.params.planer;
+    this.lincor = this.params.lincor;
 
     super.wrap();
 
-    this.createMenuItem(2, '/img/showcase1.jpg');
-    this.createMenuItem(2, '/img/showcase2.jpg');
-    this.createMenuItem(2);
-    this.createMenuItem(2);
-    this.createMenuItem(2);
-    this.createMenuItem(2);
+    this.createMenuItem(2, '/img/showcase1.png', 'whsjs');
+    this.createMenuItem(2, '/img/showcase2.png', 'webassembly');
+    this.createMenuItem(2, '/img/showcase3.png', 'sbg');
+    this.createMenuItem(2, '/img/showcase4.png', 'website');
+    this.createMenuItem(2, '/img/showcase5.png', 'registry');
+    this.createMenuItem(2, '/img/showcase6.png', 'ammonext');
   }
 
-  createMenuItem(size = 1, image = '/img/showcase1.jpg') {
+  createMenuItem(size = 1, image = '/img/showcase1.png', scid = 'whsjs') {
     const geometry = new THREE.Geometry();
     const geometry2 = new THREE.Geometry();
     const lineDiff = 0.2;
@@ -92,11 +94,13 @@ class Menu extends Component {
     let isActive = false;
 
     elementAlias.on('mouseover', () => {
+      hoverBody();
       TweenLite.to(element.position, 0.3, {z: 1, ease: Power2.easeInOut});
       TweenLite.to(element.material.color, 0.3, {r: destColor.r, g: destColor.g, b: destColor.b, ease: Power2.easeInOut});
     });
 
     const returnBack = () => {
+      unHoverBody();
       TweenLite.to(element.position, 0.1, {z: 0, ease: Power2.easeInOut});
       TweenLite.to(element.material.color, 0.1, {r: tmpColor.r, g: tmpColor.g, b: tmpColor.b, ease: Power2.easeInOut});
     };
@@ -111,6 +115,8 @@ class Menu extends Component {
 
     elementAlias.on('click', () => {
       this.planer.updateImage(image);
+      this.lincor.trigger();
+      this.planer.scid = scid;
     });
 
     this.vmouse.on('mouseup', () => {

@@ -9,6 +9,7 @@ class Connector extends Component {
     super(params, Connector.defaults, Connector.instructions);
 
     this.native = new THREE.Mesh();
+    this.material = new THREE.LineBasicMaterial({color: 0x000000});
 
     const planerVec = new THREE.Vector3().copy(this.params.planer);
     const lincorVec = new THREE.Vector3().copy(this.params.lincor);
@@ -24,7 +25,7 @@ class Connector extends Component {
 
           return geom;
         })(),
-        new THREE.LineBasicMaterial({color: 0x000000})
+        this.material
       ),
       [MeshComponent]
     );
@@ -40,7 +41,7 @@ class Connector extends Component {
 
           return geom;
         })(),
-        new THREE.LineBasicMaterial({color: 0x000000})
+        this.material
       ),
       [MeshComponent]
     );
@@ -56,7 +57,7 @@ class Connector extends Component {
 
           return geom;
         })(),
-        new THREE.LineBasicMaterial({color: 0x000000})
+        this.material
       ),
       [MeshComponent]
     );
@@ -72,7 +73,7 @@ class Connector extends Component {
 
           return geom;
         })(),
-        new THREE.LineBasicMaterial({color: 0x000000})
+        this.material
       ),
       [MeshComponent]
     );
@@ -88,7 +89,7 @@ class Connector extends Component {
 
           return geom;
         })(),
-        new THREE.LineBasicMaterial({color: 0x000000})
+        this.material
       ),
       [MeshComponent]
     );
