@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Основи стереометрії</title>
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/three.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <style>
+        /* cyrillic */
+        @font-face {
+          font-family: 'Noto Sans';
+          font-style: normal;
+          font-weight: 400;
+          src: local('Noto Sans'), local('NotoSans'), url(fonts/noto_sans_cyrilic.woff2) format('woff2');
+          unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+        }
+        
+        /* latin */
+        @font-face {
+          font-family: 'Noto Sans';
+          font-style: normal;
+          font-weight: 400;
+          src: local('Noto Sans'), local('NotoSans'), url(fonts/noto_sans.woff2) format('woff2');
+          unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+        }
+        
+        /* ALL */
+        * {
+            font-family: 'Noto Sans', sans-serif;
+        }
+        
+        /* CONTENT */
+        html,
+        body {
+            position: relative;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        #canvasInner {
+            width: 50%;
+            height: 100%;
+            position: relative;
+        }
+        
+        #desk {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 50%;
+            background: #24A09B;
+            height: 100%;
+            color: white;
+        }
+        
+        /* SCENE OPTIONS */
+        #scene_opt {
+            width: 100%;
+            height: auto;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: rgb(49, 47, 56);
+            box-shadow: 0 0 30px black;
+            min-height: 0px;
+            height:10px;
+        }
+        
+        #scene_opt > div {
+            padding: 0px 40px;
+            min-height: 0px;
+            width:calc(100% - 80px); 
+            height:auto;
+        }
+        
+        #scene_opt > div > div {
+            padding: 0px 40px;
+            justify-content: space-around;
+        }
+        
+        #scene_opt div a {
+            color: white !important;
+            font-size: 20px;
+            padding: 0px 10px 2px 10px;
+            text-decoration: none;
+            border-bottom: 2px solid #bc13fe;
+            text-shadow: 1px 1px 0 #555, 2px 2px 0 #555;
+        }
+        
+        #scene_opt div a.icon {
+            border-bottom: none;
+            margin: 30px;
+            padding: 0;
+        }
+        
+        #scene_opt div a.sublist {
+            color: white !important;
+            font-size: 16px;
+            /*padding: 0px 10px 2px 20px;*/
+            text-decoration: none;
+            border-bottom: 2px solid lightgreen;
+            text-shadow: none;
+            margin-left: 20px;
+            width: 150px;
+            display: inline-block !important;
+        }
+        
+        input[type="checkbox"] {
+            height: 20px;
+            width: 20px;
+        }
+        
+        .close_switcher {
+            position: absolute;
+            width: 300px;
+            height: 20px;
+            left: calc(50% - 150px);
+            bottom: -20px;
+            background: rgba(159, 255, 140, 0.9);
+            border-radius: 0 0 5px 5px;
+            color: darkpink;
+            text-align: center;
+            text-decoration: none;
+            font-family: 'Noto Sans', sans-serif;
+            text-shadow: 0 0 5px white;
+            border-bottom: 0 !important;
+            padding-bottom: 10px !important;
+            box-shadow: 0 0 10px black;
+        }
+        
+        .close_switcher:hover {
+            background: rgba(255, 0, 253, 0.5);
+        }
+        
+        .close_switcher span {
+            position: relative;
+            width: inherit;
+            height: inherit;
+        }
+        
+        .close_switcher span:before {
+            content: "";
+            position: absolute;
+            left: -65px;
+            top: 0;
+            /* width: 10px; */
+            /* height: 10px; */
+            border-top: 5px solid rgb(49, 47, 56);
+            border-left: 5px solid rgb(49, 47, 56);
+            border-bottom: 5px solid rgb(30, 28, 36);
+            border-right: 5px solid rgb(30, 28, 36);
+        }
+        
+        .close_switcher span:after {
+            content: "";
+            position: absolute;
+            right: -65px;
+            top: 0;
+            /* width: 10px; */
+            /* height: 10px; */
+            border-top: 5px solid rgb(49, 47, 56);
+            border-right: 5px solid rgb(49, 47, 56);
+            border-bottom: 5px solid rgb(30, 28, 36);
+            border-left: 5px solid rgb(30, 28, 36);
+        }
+        
+        #scene_opt div *:not(.close_switcher):not(.csw) {
+            display: none;
+        }
+        
+        .del {
+            display: none !important;
+            color: inherit;
+        }
+        
+        .del:target {
+            display: block !important;
+        }
+        
+        button {
+            border: 0;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 3px 10px;
+            border-radius: 3px;
+            color: white;
+            font-weight: bold;
+            outline: none;
+        }
+        
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        input[type=checkbox] {
+            position: absolute;
+            margin-top: 8px;
+            margin-left: 8px;
+        }
+        
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 200px;
+            margin-left: 40px;
+            height: 10px;
+            background-color: transparent;
+        }
+        
+        input[type=range]:disabled {
+            opacity: 0.5;
+        }
+        
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 300px;
+            height: 5px;
+            background: #ddd;
+            border: none;
+            border-radius: 3px;
+        }
+        
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            border: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: lightgreen;
+            margin-top: -4px;
+            cursor:pointer;
+        }
+        
+        input[type=range]:focus {
+            outline: none;
+        }
+        
+        input[type=range]:focus::-webkit-slider-runnable-track {
+            background: #ccc;
+        }
+        
+        input[type=range]::-moz-range-track {
+            width: 200px;
+            height: 5px;
+            background: #ddd;
+            border: none;
+            border-radius: 3px;
+        }
+        
+        input[type=range]::-moz-range-thumb {
+            border: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: goldenrod;
+        }
+        
+        /*hide the outline behind the border*/
+        input[type=range]:-moz-focusring {
+            outline: 1px solid transparent;
+            outline-offset: -1px;
+        }
+        
+        input[type=range]::-ms-track {
+            width: 300px;
+            height: 5px;
+            background: transparent;
+            border-color: transparent;
+            border-width: 6px 0;
+            color: transparent;
+        }
+        
+        input[type=range]::-ms-fill-lower {
+            background: #777;
+            border-radius: 10px;
+        }
+        
+        input[type=range]::-ms-fill-upper {
+            background: #ddd;
+            border-radius: 10px;
+        }
+        
+        input[type=range]::-ms-thumb {
+            border: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: goldenrod;
+        }
+        
+        input[type=range]:focus::-ms-fill-lower {
+            background: #888;
+        }
+        
+        input[type=range]:focus::-ms-fill-upper {
+            background: #ccc;
+        }
+    </style>
+</head>
+<script>
+    var figures = {};
+    var transl = {
+        "sphere": "сферу",
+        "cube": "куб",
+        "cylinder": "конус"
+    }
+    
+    // NOTE: Configure.
+    function configure(el, func) {
+        if (figures[el] && func != "remove")
+            figures[el][func]();
+        else if (figures[el] && func == "remove") {
+            figures[el][func]();
+            figures[el] = false;
+        } else {
+            console.warn("Please, add " + el + " to the scene first!");
+            alert("Спочатку додайте " + transl[el] + " на сцену.");
+        }
+    }
+</script>
+<body>
+    <div id="canvasInner">
+        <button style="position:absolute; right: 20px; top: 50px;" value="stop" onClick="isRotating = true">Повертати</button>
+        <button style="position:absolute; right: 20px; top: 80px;" value="stop" onClick="isRotating = false">Зупинити</button>
+    </div>
+    <div id="desk">
+        <div style="padding:40px;">
+            <div id="sphere" class="del">
+                <p><b>Сфе́ра</b> <i>(від грец. σφαῖρα — куля)</i> — замкнута поверхня, геометричне місце точок рівновіддалених від даної точки, що є центром сфери. Сфера є окремим випадком еліпсоїда, у якого всі три півосі однакові.</p>
+                <h1>Властивості</h1>
+                <p><u>Відрізок, що сполучає центр сфери з її точкою, а також його <b>довжина</b></u>, називається радіусом; відрізок, що сполучає дві точки сфери — хордою; хорда, що проходить через центр сфери називається її діаметром. Сферу можна розглядати також як поверхню обертання півкола навколо його діаметра. Частина простору, яка обмежена сферою і містить її центр, називається кулею. Переріз сфери довільною площиною є коло. Воно називається великим, коли площина проходить через центр сфери, всі інші перерізи є малими колами. У сфери найменша площа поверхні з-поміж всіх тіл, що замикають даний об'єм, та найбільший замкнений об'єм при даній площі поверхні. З цієї причини, сфера часто зустрічається у природі: краплі води в невагомості, планети, глобули і т.ін. Площину (пряму), яка має зі сферою тільки одну спільну точку, називають дотичною площиною (прямою) до сфери. Якщо дві сфери мають тільки одну спільну точку, говорять, що вони дотикаються в цій точці.</p>
+            </div>
+            
+            <div id="cube" class="del">
+                <p>
+                    <h2>Куб або гексаедр</h2> — правильний багатогранник, кожна грань якого є квадратом. Окремий випадок паралелепіпеда і призми. У різних дисциплінах використовуються значення терміну, що мають відношення до тих або інших властивостей геометричного прототипу. Зокрема, в алгебрі кубом числа називають значення цього числа, піднесене до 3-го степеня. В аналітиці (OLAP-аналіз) застосовуються так звані аналітичні багатовимірні куби, що дозволяють в наочному вигляді зіставити дані з різних таблиць.</p>
+            </div>
+            
+            <div id="radius" class="del">
+                <p>Відрізок, що сполучає центр сфери з її точкою, а також його довжина, називається <b>радіусом.</b></p>
+            </div>
+            
+            <div id="cyl_rad" class="del">
+                <p>Відрізок, що сполучає центр сфери з її точкою, а також його довжина, називається <b>радіусом.</b></p>
+            </div>
+            
+            <div id="diametr" class="del">
+                <p>Хорда, що проходить через центр сфери називається її <b>діаметром.</b> </p>
+            </div>
+            
+            <div id="height" class="del">
+                <p><b>Висота</b> — перпендикуляр, опущений з вершини фігури на його основу.</p>
+            </div>
+            
+            <div id="heights" class="del">
+                <p><b>Вершинами</b> многогранника називаються вершини многогранних кутів, утворених його гранями, що сходяться в одній точці.</p>
+            </div>
+            
+            <div id="cylinder" class="del">
+                <p>Ко́нус — геометричне тіло, отримане шляхом об'єднання всіх променів, що виходять з однієї точки — вершини конуса, і таких що проходять через довільну плоску поверхню. Іноді конусом називають частину такого тіла, отриману об'єднанням усіх відрізків, що з'єднують вершину і точки пласкої поверхні (яку в такому випадку називають основою конуса, а конус називають таким, що спирається на дану поверхню). Надалі буде розглядатися саме цей випадок, якщо не сказано про інше.</p>
+            </div>
+            
+            <div id="rebro" class="del">
+                <p><b>Ребрами</b> многогранника називаються спільні сторони суміжних граней (многокутників).</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="scene_opt">
+        <div>
+            <div style="position:relative; float:left; width:80%; display: flex;">
+                <div style="float:left;">
+                    <span class="sphere"> 
+                    <a href="#sphere" onclick="figures['sphere'] = new Sphere_figure({radius: 200,  color: 0x00ff00, pos:{x:0, y:0, z:0}, wf: true});" class="figureAdd">додати сферу</a>
+                    <input type="checkbox" id="sphere_check" onClick="configure('sphere', 'remove')" disabled>
+                    <input type="range" min="0" max="100" step="1" value="100" disabled> 
+                </span>
+                    <br>
+                    <br><a href="#radius" onclick="configure('sphere', 'showRadius')" class="sublist">показати радіус</a><a href="#sphere" onclick="configure('sphere', 'hideRadius')" class="sublist">сховати радіус</a>
+                    <br>
+                    <br><a href="#diametr" onclick="configure('sphere', 'showDiametr')" class="sublist">показати діаметр</a><a href="#sphere" onclick="configure('sphere', 'hideDiametr')" class="sublist">сховати діаметр</a>
+                    <br>
+                    <br>
+                    <br>
+
+                    <span class="cube">
+                	<a href="#cube" onclick="figures['cube'] = new Cube_figure({radius: 200,  color: 0x00ff00, pos:{x:0, y:0, z:0}, wf: true});" class="figureAdd">додати куб</a>
+                	<input type="checkbox" id="cube_check" onClick="configure('cube', 'remove')" disabled>
+                	<input type="range" min="0" max="100" step="1" value="100" disabled> 
+                </span>
+                    <br>
+                    <br><a href="#heights" onclick="configure('cube', 'showHeights')" class="sublist">показати вершини</a><a href="#cube" onclick="configure('cube', 'hideHeights')" class="sublist">сховати вершини</a>
+                    <br>
+                    <br><a href="#rebro" onclick="configure('cube', 'showBorder')" class="sublist">показати грань</a><a href="#cube" onclick="configure('cube', 'hideBorder')" class="sublist">сховати грань</a>
+                </div>
+                <div style="float:right;">
+                    <span class="cylinder">
+                	<a href="#cylinder" onclick="figures['cylinder'] = new Cylinder_figure({rTop: 0, rBottom: 200, height:400,  color: 0x00ff00, pos:{x:0, y:0, z:0}, wf: true});" class="figureAdd">додати конус</a>
+                	<input type="checkbox" id="cylinder_check" onClick="configure('cylinder', 'remove')" disabled>
+                	<input type="range" min="0" max="100" step="1" value="100" disabled> 
+                </span>
+                    <br>
+                    <br><a href="#cyl_rad" onclick="configure('cylinder', 'showRadius')" class="sublist">показати радіус</a><a href="#cylinder" onclick="configure('cylinder', 'hideRadius')" class="sublist">сховати радіус</a>
+                    <br>
+                    <br><a href="#height" onclick="configure('cylinder', 'showHeight')" class="sublist">показати висоту</a><a href="#cylinder" onclick="configure('cylinder', 'hideHeight')" class="sublist">сховати висоту</a>
+                </div>
+                <div style="float:right; position:relative;">
+                    <a href="javascript:void(0);" style="opacity:0.6;" id="materialCh" class="icon"><img src="img/icons/icon_cube.png" width="32" height="32"></a>
+                    <br>
+                </div>
+            </div>
+
+            <a href="#" class="close_switcher"><span class="csw">Налаштування сцени</span></a>
+        </div>
+
+    </div>
+    <a style="position:absolute; right:80px; bottom:30px; width:20px; height:20px; background:black;" id="txtcolorswitch" href="javascript:$('#desk').css('color', 'black');">
+    </a>
+    <a style="position:absolute; right:60px; bottom:30px; width:20px; height:20px; background:white;" id="txtcolorswitch" href="javascript:$('#desk').css('color', 'white');">
+    </a>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
