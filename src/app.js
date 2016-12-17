@@ -1,21 +1,16 @@
 import {world, cameraContainer} from './world';
-import { addLights } from './lights';
 import {Planer} from './components/Planer';
 import {Space} from './components/Space';
 import {Lincor} from './components/Lincor';
 import {Connector} from './components/Connector';
 import {Menu} from './components/Menu';
-import {Group} from 'whs/src/framework/extras/Group'
 import {VirtualMouse} from 'whs/src/framework/extras/VirtualMouse';
-import {OrbitControls} from 'whs/src/framework/extras/controls/OrbitControls';
 import {Plane} from 'whs/src/framework/components/meshes/Plane';
 import * as THREE from 'whs/src/framework/three';
 import './lib/polyfill';
 import {hoverBody, unHoverBody} from './utils/changeCursor';
 
 const TweenLite = require('gsap').TweenLite;
-
-const spotty = addLights(world);
 
 const vmouse = new VirtualMouse(world, true);
 
@@ -79,7 +74,6 @@ vmouse.on('move', () => {
   // if (cameraLocked) return;
   world.$camera.position.x = vmouse.x * 10;
   world.$camera.lookAt(getLookVec());
-  spotty.position.x = vmouse.x * 30 + 10;
 });
 
 TweenLite.to(lookAtVec, 3, {y: 5, onUpdate: () => {
@@ -121,6 +115,7 @@ const resetContent = () => {
 }
 
 // 0
+
 function projects() {
   if (currentStage === 0) return;
   resetContent();
