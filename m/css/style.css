@@ -9,11 +9,9 @@ html, body {
 
   /* BACKGROUND */
   background: rgba(45,45,45,1);
-  background: -moz-linear-gradient(-45deg, rgba(45,45,45,1) 0%, rgba(4,4,4,1) 100%);
   background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(45,45,45,1)), color-stop(100%, rgba(4,4,4,1)));
   background: -webkit-linear-gradient(-45deg, rgba(45,45,45,1) 0%, rgba(4,4,4,1) 100%);
-  background: -o-linear-gradient(-45deg, rgba(45,45,45,1) 0%, rgba(4,4,4,1) 100%);
-  background: -ms-linear-gradient(-45deg, rgba(45,45,45,1) 0%, rgba(4,4,4,1) 100%);
+  background: -webkit-linear-gradient(315deg, rgba(45,45,45,1) 0%, rgba(4,4,4,1) 100%);
   background: linear-gradient(135deg, rgba(45,45,45,1) 0%, rgba(4,4,4,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#cccccc', GradientType=1 );
   background-attachment: fixed;
@@ -53,7 +51,7 @@ body {
 }
 
 body.isHovered {
-	cursor: pointer;
+  cursor: pointer;
 }
 header {
   font-family: 'Raleway', sans-serif;
@@ -61,20 +59,27 @@ header {
 }
 
 header.inversed .fUnder, header.inversed ul li {
-	color: white;
-	border-color: white;
+  color: white;
+  border-color: white;
 }
 
 header ul {
   display: block;
   margin: 16px auto;
-	display: block;
+  display: block;
   overflow: hidden;
   width: 100px;
-  animation: initName 1s;
+  -webkit-animation: initName 1s;
+          animation: initName 1s;
   width: 100px;
   padding: 20px;
-  transform: scale(1.4);
+  -webkit-transform: scale(1.4);
+          transform: scale(1.4);
+}
+
+@-webkit-keyframes initName {
+  from { width: 0px; color: white; }
+  to { width: 100px; color: white; }
 }
 
 @keyframes initName {
@@ -83,24 +88,37 @@ header ul {
 }
 
 .fUnder {
-	border-bottom: 4px solid black;
-	border-color: black;
-	animation: fUnder 1s;
+  border-bottom: 4px solid black;
+  border-color: black;
+  -webkit-animation: fUnder 1s;
+          animation: fUnder 1s;
+}
+
+@-webkit-keyframes fUnder {
+  from { border-color: rgb(0, 255, 213); color: rgb(0, 255, 213); }
+  to { border-color: white; color: white; }
 }
 
 @keyframes fUnder {
-	from { border-color: rgb(0, 255, 213); color: rgb(0, 255, 213); }
-	to { border-color: white; color: white; }
+  from { border-color: rgb(0, 255, 213); color: rgb(0, 255, 213); }
+  to { border-color: white; color: white; }
+}
+
+@-webkit-keyframes colorAnim {
+  from { color: rgb(0, 255, 213); }
+  to { color: white; }
 }
 
 @keyframes colorAnim {
-	from { color: rgb(0, 255, 213); }
-	to { color: white; }
+  from { color: rgb(0, 255, 213); }
+  to { color: white; }
 }
 
 header ul li {
   list-style: none;
-  animation: colorAnim 1s;
+  -webkit-animation: colorAnim 1s;
+          animation: colorAnim 1s;
+  -webkit-transition: all 2s ease-in;
   transition: all 2s ease-in;
 }
 
@@ -134,6 +152,7 @@ footer ul li {
 footer ul li a {
   color: black;
   text-decoration: none;
+  -webkit-transition: color 0.1s linear;
   transition: color 0.1s linear;
 }
 
@@ -152,19 +171,22 @@ footer ul li hr {
 }
 
 .content {
-	font-family: 'Source Sans Pro', sans-serif;
-	line-height: 1.2;
-	font-size: 15pt;
-	color: white;
-	top: 0;
-	transition: transform 2.5s ease-in-out;
-	width: 100%;
+  font-family: 'Source Sans Pro', sans-serif;
+  line-height: 1.2;
+  font-size: 15pt;
+  color: white;
+  top: 0;
+  -webkit-transition: -webkit-transform 2.5s ease-in-out;
+  transition: -webkit-transform 2.5s ease-in-out;
+  transition: transform 2.5s ease-in-out;
+  transition: transform 2.5s ease-in-out, -webkit-transform 2.5s ease-in-out;
+  width: 100%;
 }
 
 .content > div {
-	max-width: 600px;
-	margin: 0 auto;
-	padding: 40px 60px;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 60px;
 }
 
 .content img {
@@ -172,37 +194,46 @@ footer ul li hr {
 }
 
 .content.show {
-	transform: translateY(0%);
-	transition: transform 1.5s ease-in-out;
+  -webkit-transform: translateY(0%);
+          transform: translateY(0%);
+  -webkit-transition: -webkit-transform 1.5s ease-in-out;
+  transition: -webkit-transform 1.5s ease-in-out;
+  transition: transform 1.5s ease-in-out;
+  transition: transform 1.5s ease-in-out, -webkit-transform 1.5s ease-in-out;
 }
 
 .content a {
   text-decoration: none;
-	color: #eee;
-	font-weight: 700;
-	border-bottom: 2.7px solid #ddd;
-	margin: 0 1.5px;
-	line-height: 1.3;
-	display: inline-block;
+  color: #eee;
+  font-weight: 700;
+  border-bottom: 2.7px solid #ddd;
+  margin: 0 1.5px;
+  line-height: 1.3;
+  display: inline-block;
 }
 
 .content ul {
   font-weight: 700;
   list-style: none;
-	padding: 10px 0;
+  padding: 10px 0;
 }
 
 .content h2 {
-	padding: 20px 0 0 0;
-	margin: 20px 0 0 0;
+  padding: 20px 0 0 0;
+  margin: 20px 0 0 0;
 }
 
 .content ul.yearlist {
-	margin: 0px;
+  margin: 0px;
   font-weight: 400;
   color: #ddd;
-	list-style: square !important; 
-	    padding: 10px 0 0 20px;
+  list-style: square !important; 
+      padding: 10px 0 0 20px;
+}
+
+::-moz-selection {
+  background: #6400cb; /* WebKit/Blink Browsers */
+  opacity: 0.7;
 }
 
 ::selection {
@@ -229,21 +260,32 @@ footer ul li hr {
 }
 
 .fader {
-	width: 100%;
+  width: 100%;
+  display: -ms-grid;
   display: grid;
+  -webkit-transition: -webkit-transform 0.1s ease-in;
+  transition: -webkit-transform 0.1s ease-in;
   transition: transform 0.1s ease-in;
-  animation-iteration-count: 1;
+  transition: transform 0.1s ease-in, -webkit-transform 0.1s ease-in;
+  -webkit-animation-iteration-count: 1;
+          animation-iteration-count: 1;
   opacity: 0;
   animation-fill-mode: forwards;
   -webkit-animation-fill-mode: forwards;
 }
 
 .fader:active {
-	transform: scale(0.95);
+  -webkit-transform: scale(0.95);
+          transform: scale(0.95);
 }
 
 .fader img {
-	width: inherit;
+  width: inherit;
+}
+
+@-webkit-keyframes appear {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes appear {
